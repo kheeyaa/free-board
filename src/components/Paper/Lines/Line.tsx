@@ -1,4 +1,5 @@
 import { getStroke } from "perfect-freehand";
+import { forwardRef } from "react";
 import { PositionType } from "../../../types/post";
 import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 
@@ -26,29 +27,32 @@ const options = {
   smoothing: 0.8,
 };
 
-export default function Line({
-  type = "LINE",
-  id,
-  lineInfo: { style, points, position },
-}: LineProps) {
-  const stroke = getStroke(points, options);
-  const pathData = getSvgPathFromStroke(stroke);
+const Line = forwardRef(
+  (
+    { type = "LINE", id, lineInfo: { style, points, position } }: LineProps,
+    forwardRef: any
+  ) => {
+    const stroke = getStroke(points, options);
+    const pathData = getSvgPathFromStroke(stroke);
 
-  return (
-    <svg
-      data-id={id}
-      viewBox={`-10 -10 ${style.width} ${style.height}`}
-      style={{
-        position: "absolute",
-        left: position.x + "px",
-        top: position.y + "px",
-        width: style.width + "px",
-        height: style.height + "px",
-      }}
-    >
-      <g>
-        <path d={pathData} />
-      </g>
-    </svg>
-  );
-}
+    return (
+      <svg
+        ref={forwardRef}
+        data-id={id}
+        viewBox={`-10 -10 ${style.width} ${style.height}`}
+        style={{
+          position: "absolute",
+          left: position.x + "px",
+          top: position.y + "px",
+          width: style.width + "px",
+          height: style.height + "px",
+        }}
+      >
+        <g>
+          <path d={pathData} />
+        </g>
+      </svg>
+    );
+  }
+);
+export default Line;

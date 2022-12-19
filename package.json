@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/uuid": "^9.0.0",
+    "dragselect": "^2.5.5",
     "firebase": "^9.15.0",
     "perfect-freehand": "^1.2.0",
     "react": "^18.2.0",
