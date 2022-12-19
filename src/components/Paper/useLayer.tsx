@@ -1,24 +1,10 @@
 import { useState } from "react";
-
-export type LayerType = {
-  id: string;
-  Component: () => JSX.Element;
-};
+import { LayerProps } from "./LayerComponent";
 
 export default function useLayer() {
-  const [layerList, setLayerList] = useState<LayerType[]>([]);
+  const [layerList, setLayerList] = useState<LayerProps[]>([]);
 
-  const Layers = () => {
-    return (
-      <>
-        {layerList.map(({ id, Component }) => (
-          <Component key={id} />
-        ))}
-      </>
-    );
-  };
-
-  const findLayer = (id: string): [LayerType, number] => {
+  const findLayer = (id: string): [LayerProps, number] => {
     let idx = -1;
     const layer = layerList.filter((layer, index) => {
       if (layer.id === id) {
@@ -34,7 +20,7 @@ export default function useLayer() {
     if (!layer) return;
     setLayerList((layerList) => {
       const front = layerList.slice(0, idx);
-      const back = layerList.slice(0, idx);
+      const back = layerList.slice(idx + 1);
       return [...front, ...back, layer];
     });
   };
@@ -69,7 +55,7 @@ export default function useLayer() {
     });
   };
 
-  const addLayer = (layer: LayerType) => {
+  const addLayer = (layer: LayerProps) => {
     setLayerList((prev) => [...prev, layer]);
   };
 
@@ -84,7 +70,7 @@ export default function useLayer() {
   };
 
   return {
-    Layers,
+    layerList,
     findLayer,
     bringLayerFront,
     bringLayerBack,

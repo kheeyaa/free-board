@@ -3,6 +3,7 @@ import { useMode } from "../../store/mode";
 import { MODE } from "../../types/mode";
 import PencilButton from "./Button/PencilButton";
 import PostButton from "./Button/PostButton";
+import SelectionButton from "./Button/SelectionButton";
 
 export default function Toolbar() {
   const { mode, setMode } = useMode();
@@ -19,6 +20,12 @@ export default function Toolbar() {
         isActive={mode === "PENCIL"}
         onClick={() => {
           setMode("PENCIL");
+        }}
+      />
+      <SelectionButton
+        isActive={mode === "SELECTION"}
+        onClick={() => {
+          setMode("SELECTION");
         }}
       />
     </div>

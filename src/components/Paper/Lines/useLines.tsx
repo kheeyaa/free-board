@@ -1,34 +1,18 @@
 import { useState } from "react";
-import { useMode } from "../../store/mode";
+import { useMode } from "../../../store/mode";
 import { getStroke } from "perfect-freehand";
-import { getSvgPathFromStroke } from "../../utils/getSvgPathFromStroke";
-import { useCanvas } from "../../store/canvas";
+import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 import { v4 as uuidv4 } from "uuid";
-import { LayerType } from "./useLayer";
+import { LineProps, Point } from "./Line";
+import { useLayers } from "../../../store/layers";
 
-type Point = [number, number, number];
+export default function useLines() {
+  const { addLayer } = useLayers();
 
-type Line = {
-  id: string;
-  points: Point[];
-  style: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-};
-
-type useLinesProps = {
-  addLayer: (layer: LayerType) => void;
-};
-
-export default function useLines({ addLayer }: useLinesProps) {
   const { mode } = useMode();
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [line, setLine] = useState<Point[]>([]);
-  const [lines, setLines] = useState<Line[]>([]);
 
   const options = {
     size: 10,
@@ -52,7 +36,7 @@ export default function useLines({ addLayer }: useLinesProps) {
     setLine([...line, [e.pageX, e.pageY, e.pressure]]);
   }
 
-  function getLineInfo(line: Point[]): Line {
+  function getLineInfo(line: Point[]): LineProps {
     const maxX = line.reduce((maxX, [curX]) => (maxX < curX ? curX : maxX), 0);
     const maxY = line.reduce(
       (maxY, [, curY]) => (maxY < curY ? curY : maxY),
@@ -73,6 +57,7 @@ export default function useLines({ addLayer }: useLinesProps) {
     ]);
 
     return {
+      type: "LINE",
       id: uuidv4(),
       points: newLine,
       style: {
@@ -89,34 +74,10 @@ export default function useLines({ addLayer }: useLinesProps) {
     setIsDrawing(false);
 
     const newLine = getLineInfo(line);
-    const { id, points, style } = newLine;
-
     addLayer({
-      id,
-      Component: () => {
-        const stroke = getStroke(points, options);
-        const pathData = getSvgPathFromStroke(stroke);
-
-        return (
-          <svg
-            key={id}
-            viewBox={`-10 -10 ${style.width} ${style.height}`}
-            style={{
-              position: "absolute",
-              left: style.x + "px",
-              top: style.y + "px",
-              width: style.width + "px",
-              height: style.height + "px",
-            }}
-          >
-            <g>
-              <path d={pathData} />
-            </g>
-          </svg>
-        );
-      },
+      id: newLine.id,
+      layerInfo: newLine,
     });
-    setLines((lines) => [...lines, newLine]);
     setLine([]);
   }
 
