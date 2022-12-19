@@ -9,7 +9,6 @@ export type PostProps = {
   id: string;
   type: "POST";
   postInfo: POST;
-  // setPost?: (post: POST) => void;
 };
 
 export default function Post({ id, type = "POST", postInfo }: PostProps) {
@@ -58,6 +57,7 @@ export default function Post({ id, type = "POST", postInfo }: PostProps) {
         className="p-5 bg-transparent focus:outline-none placeholder:italic placeholder-gray-500 placeholder-opacity-20"
         style={{ width: postInfo.width, height: postInfo.height }}
         value={contents}
+        disabled={!(mode === "NONE" || mode === "SELECTION")}
       />
     </div>
   );

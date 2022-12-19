@@ -1,11 +1,13 @@
+export type PositionType = {
+  x: number;
+  y: number;
+};
+
 export type POST = {
   id: string;
   width: number;
   height: number;
-  position: {
-    x: number;
-    y: number;
-  };
+  position: PositionType;
   contents: any;
   createdAt: string;
   userId: string;
