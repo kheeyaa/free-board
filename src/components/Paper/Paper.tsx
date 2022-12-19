@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useMode } from "../../store/mode";
 import useLines from "./Lines/useLines";
 import LayerComponent from "./LayerComponent";
@@ -8,9 +7,7 @@ import { DragSelectProvider } from "../../utils/DragSelectContext";
 
 export default function Paper() {
   const { mode } = useMode();
-
   const { layers } = useLayers();
-
   const { handleAddPost } = usePost();
 
   const {
@@ -22,7 +19,7 @@ export default function Paper() {
 
   return (
     <>
-      <DragSelectProvider settings={{}}>
+      <DragSelectProvider>
         <div className="relative w-full h-[2000px] bg-gray-50 p-20 px-[150px] pb-0 overflow-hidden">
           <div
             onClick={handleAddPost}

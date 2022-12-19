@@ -14,7 +14,6 @@ function DragSelectProvider({ children, settings = {} }: ProviderProps) {
   const { mode } = useMode();
 
   useEffect(() => {
-    console.log({ mode });
     switch (mode) {
       case "POST":
       case "PENCIL":
@@ -24,6 +23,8 @@ function DragSelectProvider({ children, settings = {} }: ProviderProps) {
       case "SELECTION":
       case "NONE":
         ds?.start();
+        break;
+      case "TRANSLATING":
         break;
       default:
         console.warn(`${mode}는 사용할 수 없는 모드입니다.`);

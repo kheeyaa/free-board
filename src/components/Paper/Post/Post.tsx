@@ -1,16 +1,17 @@
 import { forwardRef, useState } from "react";
-import { POST } from "../../../types/post";
+import { PositionType, POST } from "../../../types/post";
 import { useMode } from "../../../store/mode";
 import { useLayers } from "../../../store/layers";
 
 export type PostProps = {
   id: string;
   type: "POST";
+  position: PositionType;
   postInfo: POST;
 };
 
 const Post = forwardRef(
-  ({ id, type = "POST", postInfo }: PostProps, forwardRef: any) => {
+  ({ id, type = "POST", position, postInfo }: PostProps, forwardRef: any) => {
     const { mode, setMode } = useMode();
     const [contents, setContents] = useState(postInfo.contents);
     const { setLayer } = useLayers();
@@ -22,6 +23,7 @@ const Post = forwardRef(
         layerInfo: {
           type: "POST",
           id,
+          position,
           postInfo: {
             ...postInfo,
             contents: e.target.value,
@@ -33,8 +35,11 @@ const Post = forwardRef(
     return (
       <div
         ref={forwardRef}
-        className="absolute bg-yellow-200 shadow-md "
-        style={{ left: postInfo.position.x, top: postInfo.position.y }}
+        className="absolute bg-yellow-200 shadow-md top-0 left-0"
+        style={{
+          transition: postInfo.isAnimated ? "transform 50ms linear" : "",
+          transform: `translate(${position.x}px, ${position.y}px)`,
+        }}
         data-id={id}
       >
         <textarea

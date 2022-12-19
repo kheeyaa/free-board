@@ -7,7 +7,7 @@ export type Point = [number, number, number];
 
 export type LineTypes = {
   points: Point[];
-  position: PositionType;
+  isAnimated?: boolean;
   style: {
     width: number;
     height: number;
@@ -18,6 +18,7 @@ export type LineProps = {
   id: string;
   type: "LINE";
   lineInfo: LineTypes;
+  position: PositionType;
 };
 
 const options = {
@@ -29,7 +30,12 @@ const options = {
 
 const Line = forwardRef(
   (
-    { type = "LINE", id, lineInfo: { style, points, position } }: LineProps,
+    {
+      type = "LINE",
+      id,
+      position,
+      lineInfo: { style, points, isAnimated = false },
+    }: LineProps,
     forwardRef: any
   ) => {
     const stroke = getStroke(points, options);
@@ -42,10 +48,12 @@ const Line = forwardRef(
         viewBox={`-10 -10 ${style.width} ${style.height}`}
         style={{
           position: "absolute",
-          left: position.x + "px",
-          top: position.y + "px",
+          left: 0,
+          top: 0,
           width: style.width + "px",
           height: style.height + "px",
+          transition: isAnimated ? "transform 120ms linear" : "",
+          transform: `translate(${position.x}px, ${position.y}px)`,
         }}
       >
         <g>

@@ -59,12 +59,12 @@ export default function useLines() {
     return {
       type: "LINE",
       id: uuidv4(),
+      position: {
+        x: minX - 10,
+        y: minY - 10,
+      },
       lineInfo: {
         points: newLine,
-        position: {
-          x: minX - 10,
-          y: minY - 10,
-        },
         style: {
           width: maxX - minX + 20,
           height: maxY - minY + 20,

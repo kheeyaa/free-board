@@ -13,9 +13,9 @@ export type LayerProps = {
 export default function LayerComponent({ id, layerInfo }: LayerProps) {
   const ds = useDragSelect();
   const selectableElement = useRef(null);
-  const { mode } = useMode();
+  const { mode, setMode } = useMode();
 
-  const { bringLayerFront } = useLayers();
+  const { bringLayerFront, setLayer, findLayer } = useLayers();
 
   useEffect(() => {
     const element = selectableElement.current as unknown as HTMLElement;
@@ -26,23 +26,53 @@ export default function LayerComponent({ id, layerInfo }: LayerProps) {
   useEffect(() => {
     if (!ds) return;
 
-    const id = ds.subscribe(
+    const callbackId = ds.subscribe(
       "callback",
       (e: { items: HTMLElement[]; isDraging: boolean; event: Event }) => {
+        setMode("SELECTION");
         const { items } = e;
 
         items.forEach((layer) => {
           if (!layer) return;
           layer.style.zIndex = "1";
-          console.log(layer.style.zIndex);
           const { id: selectId } = layer.dataset;
           if (selectId) bringLayerFront(selectId);
         });
       }
     );
 
+    const dragmoveId = ds.subscribe(
+      "dragmove",
+      (e: { items: HTMLElement[]; isDraging: boolean; event: MouseEvent }) => {
+        setMode("TRANSLATING");
+
+        // const {
+        //   items,
+        //   event: { clientX, clientY },
+        // } = e;
+        // items.forEach((layer) => {
+        //   if (!layer) return;
+
+        //   const { id: selectId } = layer.dataset;
+        //   if (!selectId) return;
+
+        //   setLayer({
+        //     id: selectId,
+        //     layerInfo: {
+        //       ...layerInfo,
+        //       position: {
+        //         x: clientX,
+        //         y: clientY,
+        //       },
+        //     },
+        //   });
+        // });
+      }
+    );
+
     return () => {
-      ds.unsubscribe("callback", undefined, id);
+      ds.unsubscribe("callback", undefined, callbackId);
+      ds.unsubscribe("dragmove", undefined, dragmoveId);
     };
   }, []);
 
@@ -53,7 +83,11 @@ export default function LayerComponent({ id, layerInfo }: LayerProps) {
           ref={selectableElement}
           type={layerInfo.type}
           id={id}
-          lineInfo={layerInfo.lineInfo}
+          position={layerInfo.position}
+          lineInfo={{
+            ...layerInfo.lineInfo,
+            isAnimated: mode !== "TRANSLATING",
+          }}
         />
       );
     case "POST":
@@ -62,7 +96,11 @@ export default function LayerComponent({ id, layerInfo }: LayerProps) {
           ref={selectableElement}
           type={layerInfo.type}
           id={id}
-          postInfo={layerInfo.postInfo}
+          position={layerInfo.position}
+          postInfo={{
+            ...layerInfo.postInfo,
+            isAnimated: mode !== "TRANSLATING",
+          }}
         />
       );
     default:

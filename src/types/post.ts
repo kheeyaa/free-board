@@ -7,10 +7,10 @@ export type POST = {
   id: string;
   width: number;
   height: number;
-  position: PositionType;
   contents: any;
   createdAt: string;
   userId: string;
+  isAnimated?: boolean;
   style?: {
     color: string;
     background: string;
