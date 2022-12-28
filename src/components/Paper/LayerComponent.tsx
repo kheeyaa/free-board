@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useLayers } from "../../store/layers";
+import useYLayers from "../../hook/useYLayers";
 import { useMode } from "../../store/mode";
+import { PositionType } from "../../types/post";
 import { useDragSelect } from "../../utils/DragSelectContext";
 import Line, { LineProps } from "./Lines/Line";
 import Post, { PostProps } from "./Post/Post";
@@ -8,14 +9,19 @@ import Post, { PostProps } from "./Post/Post";
 export type LayerProps = {
   id: string;
   layerInfo: LineProps | PostProps;
+  position: PositionType;
 };
 
-export default function LayerComponent({ id, layerInfo }: LayerProps) {
+export default function LayerComponent({
+  id,
+  layerInfo,
+  position,
+}: LayerProps) {
   const ds = useDragSelect();
   const selectableElement = useRef(null);
   const { mode, setMode } = useMode();
 
-  const { bringLayerFront, setLayer, findLayer } = useLayers();
+  const { bringLayerFront, setLayer, findLayer } = useYLayers();
 
   useEffect(() => {
     const element = selectableElement.current as unknown as HTMLElement;
@@ -83,7 +89,7 @@ export default function LayerComponent({ id, layerInfo }: LayerProps) {
           ref={selectableElement}
           type={layerInfo.type}
           id={id}
-          position={layerInfo.position}
+          position={position}
           lineInfo={{
             ...layerInfo.lineInfo,
             isAnimated: mode !== "TRANSLATING",
@@ -96,7 +102,7 @@ export default function LayerComponent({ id, layerInfo }: LayerProps) {
           ref={selectableElement}
           type={layerInfo.type}
           id={id}
-          position={layerInfo.position}
+          position={position}
           postInfo={{
             ...layerInfo.postInfo,
             isAnimated: mode !== "TRANSLATING",

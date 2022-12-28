@@ -1,8 +1,8 @@
 import { useMode } from "../../../store/mode";
 import { v4 as uuidv4 } from "uuid";
 import { POST } from "../../../types/post";
-import { useLayers } from "../../../store/layers";
 import { useCanvas } from "../../../store/canvas";
+import useYLayers from "../../../hook/useYLayers";
 
 export default function usePost() {
   const { mode, setMode } = useMode();
@@ -17,7 +17,7 @@ export default function usePost() {
     sendLayerStep,
     addLayer,
     removeLayer,
-  } = useLayers();
+  } = useYLayers();
 
   const handleAddPost = (e: React.MouseEvent<HTMLDivElement>) => {
     if (mode !== "POST") return;
@@ -37,6 +37,10 @@ export default function usePost() {
 
     addLayer({
       id,
+      position: {
+        x: e.pageX,
+        y: e.pageY,
+      },
       layerInfo: {
         id,
         position: {

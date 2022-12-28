@@ -1,7 +1,7 @@
 import { forwardRef, useState } from "react";
 import { PositionType, POST } from "../../../types/post";
 import { useMode } from "../../../store/mode";
-import { useLayers } from "../../../store/layers";
+import useYLayers from "../../../hook/useYLayers";
 
 export type PostProps = {
   id: string;
@@ -14,12 +14,13 @@ const Post = forwardRef(
   ({ id, type = "POST", position, postInfo }: PostProps, forwardRef: any) => {
     const { mode, setMode } = useMode();
     const [contents, setContents] = useState(postInfo.contents);
-    const { setLayer } = useLayers();
+    const { setLayer } = useYLayers();
 
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setContents(e.target.value);
       setLayer({
         id,
+        position,
         layerInfo: {
           type: "POST",
           id,

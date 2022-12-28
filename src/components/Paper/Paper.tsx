@@ -1,13 +1,13 @@
 import { useMode } from "../../store/mode";
 import useLines from "./Lines/useLines";
 import LayerComponent from "./LayerComponent";
-import { useLayers } from "../../store/layers";
 import usePost from "./Post/usePost";
 import { DragSelectProvider } from "../../utils/DragSelectContext";
+import useYLayers from "../../hook/useYLayers";
 
 export default function Paper() {
   const { mode } = useMode();
-  const { layers } = useLayers();
+  const { layers } = useYLayers();
   const { handleAddPost } = usePost();
 
   const {
@@ -29,6 +29,7 @@ export default function Paper() {
               <LayerComponent
                 key={layer.id}
                 id={layer.id}
+                position={layer.position}
                 layerInfo={layer.layerInfo}
               />
             ))}

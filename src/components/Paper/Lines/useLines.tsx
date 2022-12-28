@@ -4,10 +4,10 @@ import { getStroke } from "perfect-freehand";
 import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 import { v4 as uuidv4 } from "uuid";
 import { LineProps, Point } from "./Line";
-import { useLayers } from "../../../store/layers";
+import useYLayers from "../../../hook/useYLayers";
 
 export default function useLines() {
-  const { addLayer } = useLayers();
+  const { addLayer } = useYLayers();
 
   const { mode } = useMode();
 
@@ -81,6 +81,7 @@ export default function useLines() {
     addLayer({
       id: newLine.id,
       layerInfo: newLine,
+      position: newLine.position,
     });
     setLine([]);
   }
