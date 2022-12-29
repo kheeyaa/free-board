@@ -64,6 +64,10 @@ export default function LayerComponent({
 
         //   setLayer({
         //     id: selectId,
+        //     position: {
+        //       x: clientX,
+        //       y: clientY,
+        //     },
         //     layerInfo: {
         //       ...layerInfo,
         //       position: {
