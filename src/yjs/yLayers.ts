@@ -6,7 +6,8 @@ const roomId = 1;
 export const doc = new Y.Doc();
 
 export const provider = new WebsocketProvider(
-  "ws://localhost:1234",
+  "wss://demos.yjs.dev",
+  // "ws://localhost:1234",
   `canvas-${roomId}`,
   doc
 );
