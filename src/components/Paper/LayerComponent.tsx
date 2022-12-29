@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import useYLayers from "../../hook/useYLayers";
-import { useMode } from "../../store/mode";
+import { useCanvas } from "../../store/canvas";
 import { PositionType } from "../../types/post";
 import { useDragSelect } from "../../utils/DragSelectContext";
 import Line, { LineProps } from "./Lines/Line";
@@ -19,7 +19,8 @@ export default function LayerComponent({
 }: LayerProps) {
   const ds = useDragSelect();
   const selectableElement = useRef(null);
-  const { mode, setMode } = useMode();
+
+  const { canvas, setCanvas } = useCanvas();
 
   const { bringLayerFront } = useYLayers();
 
@@ -27,7 +28,7 @@ export default function LayerComponent({
     const element = selectableElement.current as unknown as HTMLElement;
     if (!element || !ds) return;
     ds.addSelectables(element);
-  }, [ds, selectableElement, mode]);
+  }, [ds, selectableElement, canvas.mode]);
 
   useEffect(() => {
     if (!ds) return;
@@ -35,7 +36,7 @@ export default function LayerComponent({
     const callbackId = ds.subscribe(
       "callback",
       (e: { items: HTMLElement[]; isDraging: boolean; event: Event }) => {
-        setMode("SELECTION");
+        setCanvas({ mode: "SELECTION" });
         const { items } = e;
 
         items.forEach((layer) => {
@@ -50,7 +51,7 @@ export default function LayerComponent({
     const dragmoveId = ds.subscribe(
       "dragmove",
       (e: { items: HTMLElement[]; isDraging: boolean; event: MouseEvent }) => {
-        setMode("TRANSLATING");
+        setCanvas({ mode: "TRANSLATING" });
 
         // const {
         //   items,
@@ -98,7 +99,7 @@ export default function LayerComponent({
           position={position}
           lineInfo={{
             ...layerInfo.lineInfo,
-            isAnimated: mode !== "TRANSLATING",
+            isAnimated: canvas.mode !== "TRANSLATING",
           }}
         />
       );
@@ -111,7 +112,7 @@ export default function LayerComponent({
           position={position}
           postInfo={{
             ...layerInfo.postInfo,
-            isAnimated: mode !== "TRANSLATING",
+            isAnimated: canvas.mode !== "TRANSLATING",
           }}
         />
       );

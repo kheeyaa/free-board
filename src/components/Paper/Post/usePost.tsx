@@ -1,16 +1,14 @@
-import { useMode } from "../../../store/mode";
 import { v4 as uuidv4 } from "uuid";
-import { POST } from "../../../types/post";
-import { useCanvas } from "../../../store/canvas";
 import useYLayers from "../../../hook/useYLayers";
+import { useCanvas } from "../../../store/canvas";
 
 export default function usePost() {
-  const { mode, setMode } = useMode();
+  const { canvas, setCanvas } = useCanvas();
 
   const { addLayer } = useYLayers();
 
   const handleAddPost = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (mode !== "POST") return;
+    if (canvas.mode !== "POST") return;
     const id = uuidv4();
     const newPost = {
       id,
@@ -41,7 +39,7 @@ export default function usePost() {
         postInfo: newPost,
       },
     });
-    setMode("NONE");
+    setCanvas({ mode: "NONE" });
   };
 
   return {

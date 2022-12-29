@@ -1,38 +1,36 @@
-import { useEffect } from "react";
-import { useMode } from "../../store/mode";
-import { MODE } from "../../types/mode";
+import { useCanvas } from "../../store/canvas";
 import ClearButton from "./Button/ClearButton";
 import PencilButton from "./Button/PencilButton";
 import PostButton from "./Button/PostButton";
 import SelectionButton from "./Button/SelectionButton";
 
 export default function Toolbar() {
-  const { mode, setMode } = useMode();
+  const { canvas, setCanvas } = useCanvas();
 
   return (
     <div className="fixed z-50 top-20 left-10 w-20 backdrop-blur-sm bg-white/30 shadow-md p-10 rounded-full flex flex-col gap-3 items-center">
       <PostButton
-        isActive={mode === "POST"}
+        isActive={canvas.mode === "POST"}
         onClick={() => {
-          setMode("POST");
+          setCanvas({ mode: "POST" });
         }}
       />
       <PencilButton
-        isActive={mode === "PENCIL"}
+        isActive={canvas.mode === "PENCIL"}
         onClick={() => {
-          setMode("PENCIL");
+          setCanvas({ mode: "PENCIL" });
         }}
       />
       <SelectionButton
-        isActive={mode === "SELECTION"}
+        isActive={canvas.mode === "SELECTION"}
         onClick={() => {
-          setMode("SELECTION");
+          setCanvas({ mode: "SELECTION" });
         }}
       />
       <ClearButton
-        isActive={mode === "CLEAR"}
+        isActive={canvas.mode === "CLEAR"}
         onClick={() => {
-          setMode("CLEAR");
+          setCanvas({ mode: "CLEAR", preCanvas: canvas });
         }}
       />
     </div>

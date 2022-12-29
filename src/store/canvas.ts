@@ -1,11 +1,43 @@
 import create from "zustand";
+import { PositionType } from "../types/post";
 
-type canvasType = {
-  position: {
-    x: number;
-    y: number;
-  };
-};
+type canvasType =
+  | {
+      mode: "PENCIL";
+    }
+  | {
+      mode: "POST";
+    }
+  | {
+      mode: "NONE";
+    }
+  | {
+      mode: "ERASE";
+    }
+  | {
+      mode: "CLEAR";
+      preCanvas: canvasType;
+    }
+  | {
+      mode: "SELECTION";
+    }
+  | {
+      mode: "SELECTION_NET";
+      origin: PositionType;
+      current?: PositionType;
+    }
+  | {
+      mode: "TRANSLATING";
+      current?: PositionType;
+    }
+  | {
+      mode: "INSERTING";
+    }
+  | {
+      mode: "RESIZING";
+    };
+
+export type CanvasMode = canvasType["mode"];
 
 type createCanvas = {
   canvas: canvasType;
@@ -14,10 +46,7 @@ type createCanvas = {
 
 export const useCanvas = create<createCanvas>((set) => ({
   canvas: {
-    position: {
-      x: 150,
-      y: 80,
-    },
+    mode: "NONE",
   },
-  setCanvas: (newCanvas) => set((canvas) => ({ ...canvas, newCanvas })),
+  setCanvas: (canvas) => set({ canvas }),
 }));

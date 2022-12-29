@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
 import { PositionType, POST } from "../../../types/post";
-import { useMode } from "../../../store/mode";
 import useYLayers from "../../../hook/useYLayers";
+import { useCanvas } from "../../../store/canvas";
 
 export type PostProps = {
   id: string;
@@ -12,7 +12,7 @@ export type PostProps = {
 
 const Post = forwardRef(
   ({ id, type = "POST", position, postInfo }: PostProps, forwardRef: any) => {
-    const { mode, setMode } = useMode();
+    const { canvas } = useCanvas();
     const [contents, setContents] = useState(postInfo.contents);
     const { setLayer } = useYLayers();
 
@@ -53,7 +53,7 @@ const Post = forwardRef(
           className="p-5 bg-transparent focus:outline-none placeholder:italic placeholder-gray-500 placeholder-opacity-20"
           style={{ width: postInfo.width, height: postInfo.height }}
           value={contents}
-          disabled={!(mode === "NONE" || mode === "SELECTION")}
+          disabled={!(canvas.mode === "NONE" || canvas.mode === "SELECTION")}
         />
       </div>
     );

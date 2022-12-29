@@ -1,12 +1,13 @@
-import { useMode } from "../../store/mode";
 import useLines from "./Lines/useLines";
 import LayerComponent from "./LayerComponent";
 import usePost from "./Post/usePost";
 import { DragSelectProvider } from "../../utils/DragSelectContext";
 import useYLayers from "../../hook/useYLayers";
+import { useCanvas } from "../../store/canvas";
 
 export default function Paper() {
-  const { mode } = useMode();
+  const { canvas } = useCanvas();
+
   const { layers } = useYLayers();
   const { handleAddPost } = usePost();
 
@@ -34,7 +35,7 @@ export default function Paper() {
               />
             ))}
 
-            {mode === "PENCIL" && (
+            {canvas.mode === "PENCIL" && (
               <svg
                 onPointerDown={handleLinesPointerDown}
                 onPointerMove={handleLinesPointerMove}

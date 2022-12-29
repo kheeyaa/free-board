@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import DragSelect from "dragselect";
-import { useMode } from "../store/mode";
+import { useCanvas } from "../store/canvas";
 
 type ProviderProps = {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ const Context = createContext<DragSelect | undefined>(undefined);
 
 function DragSelectProvider({ children, settings = {} }: ProviderProps) {
   const [ds, setDS] = useState<DragSelect>();
-  const { mode } = useMode();
+  const { canvas } = useCanvas();
 
   useEffect(() => {
-    switch (mode) {
+    switch (canvas.mode) {
       case "POST":
       case "PENCIL":
         ds?.start();
@@ -28,10 +28,10 @@ function DragSelectProvider({ children, settings = {} }: ProviderProps) {
       case "TRANSLATING":
         break;
       default:
-        console.warn(`${mode}는 사용할 수 없는 모드입니다.`);
+        console.warn(`${canvas.mode}는 사용할 수 없는 모드입니다.`);
         ds?.start();
     }
-  }, [mode, ds]);
+  }, [canvas.mode, ds]);
 
   useEffect(() => {
     setDS((prevState) => {

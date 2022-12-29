@@ -2,7 +2,7 @@ import * as Y from "yjs";
 import { useEffect, useState } from "react";
 import { LayerProps } from "../components/Paper/LayerComponent";
 import { doc, yLayers } from "../yjs/yLayers";
-import { useMode } from "../store/mode";
+import { useCanvas } from "../store/canvas";
 
 type layerUtilTypes = {
   layers: LayerProps[];
@@ -16,7 +16,8 @@ type layerUtilTypes = {
 
 export default function useYLayers(): layerUtilTypes {
   const [layers, setLayers] = useState<LayerProps[]>([]);
-  const { mode, setMode } = useMode();
+
+  const { canvas, setCanvas } = useCanvas();
 
   const handleChange = () => {
     const yLayerArr = yLayers.toArray();
@@ -43,11 +44,11 @@ export default function useYLayers(): layerUtilTypes {
   }, []);
 
   useEffect(() => {
-    if (mode === "CLEAR") {
+    if (canvas.mode === "CLEAR") {
       yLayers.delete(0, yLayers.length);
-      setMode("NONE");
+      setCanvas(canvas.preCanvas);
     }
-  }, [mode]);
+  }, [canvas.mode]);
 
   const addLayer = (layer: LayerProps) => {
     const yLayer = new Y.Map();

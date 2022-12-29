@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useMode } from "../../../store/mode";
 import { getStroke } from "perfect-freehand";
 import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 import { v4 as uuidv4 } from "uuid";
 import { LineProps, Point } from "./Line";
 import useYLayers from "../../../hook/useYLayers";
+import { useCanvas } from "../../../store/canvas";
 
 export default function useLines() {
   const { addLayer } = useYLayers();
 
-  const { mode } = useMode();
+  const { canvas } = useCanvas();
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [line, setLine] = useState<Point[]>([]);
@@ -22,7 +22,7 @@ export default function useLines() {
   };
 
   function handleLinesPointerDown(e: React.PointerEvent<SVGSVGElement>) {
-    if (mode !== "PENCIL") return;
+    if (canvas.mode !== "PENCIL") return;
     const target = e.target as Element;
     target.setPointerCapture(e.pointerId);
 
