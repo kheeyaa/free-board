@@ -8,7 +8,6 @@ type layerUtilTypes = {
   layers: LayerProps[];
   setLayer: (layer: LayerProps) => void;
   addLayer: (layer: LayerProps) => void;
-  findLayer: (id: string) => [Y.Map<any>, number];
   removeLayer: (id: string) => void;
   bringLayerFront: (id: string) => void;
   bringLayerBack: (id: string) => void;
@@ -62,14 +61,17 @@ export default function useYLayers(): layerUtilTypes {
     yLayers.push([yLayer]);
   };
 
-  const findLayer = (id: string): [Y.Map<any>, number] => {
+  const findLayer = (id: string): [Y.Map<any> | null, number] => {
     let idx = -1;
-    layers.filter((layer, index) => {
-      if (layer && layer.id === id) {
-        idx = index;
-        return true;
-      }
-    })[0];
+    if (!yLayers) return [null, idx];
+
+    const yLayerArr = yLayers.toArray();
+    if (yLayerArr)
+      yLayerArr.forEach((yLayer, index) => {
+        if (yLayer && yLayer.get("id") === id) {
+          idx = index;
+        }
+      });
 
     return [yLayers.get(idx), idx];
   };
@@ -98,31 +100,33 @@ export default function useYLayers(): layerUtilTypes {
     const [yLayer, idx] = findLayer(id);
     if (!yLayer) return;
 
+    const cloneYLayer = yLayer.clone();
     yLayers.delete(idx);
-    yLayers.push([yLayer]);
+    yLayers.push([cloneYLayer]);
   };
 
   const bringLayerBack = (id: string) => {
     const [yLayer, idx] = findLayer(id);
     if (!yLayer) return;
 
+    const cloneYLayer = yLayer.clone();
     yLayers.delete(idx);
-    yLayers.insert(idx, [yLayer]);
+    yLayers.insert(idx, [cloneYLayer]);
   };
 
   const sendLayerStep = (id: string, step: number = 1) => {
     const [yLayer, idx] = findLayer(id);
     if (!yLayer || !step) return;
 
+    const cloneYLayer = yLayer.clone();
     const newIdx = idx - step;
     yLayers.delete(idx);
-    yLayers.insert(newIdx, [yLayer]);
+    yLayers.insert(newIdx, [cloneYLayer]);
   };
 
   return {
     layers,
     addLayer,
-    findLayer,
     setLayer,
     removeLayer,
     bringLayerFront,
