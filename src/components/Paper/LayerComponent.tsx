@@ -21,7 +21,7 @@ export default function LayerComponent({
   const selectableElement = useRef(null);
   const { mode, setMode } = useMode();
 
-  const { bringLayerFront, setLayer, findLayer } = useYLayers();
+  const { bringLayerFront } = useYLayers();
 
   useEffect(() => {
     const element = selectableElement.current as unknown as HTMLElement;

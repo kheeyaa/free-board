@@ -6,18 +6,8 @@ import useYLayers from "../../../hook/useYLayers";
 
 export default function usePost() {
   const { mode, setMode } = useMode();
-  const { canvas } = useCanvas();
 
-  const {
-    layers,
-    setLayer,
-    findLayer,
-    bringLayerFront,
-    bringLayerBack,
-    sendLayerStep,
-    addLayer,
-    removeLayer,
-  } = useYLayers();
+  const { addLayer } = useYLayers();
 
   const handleAddPost = (e: React.MouseEvent<HTMLDivElement>) => {
     if (mode !== "POST") return;
