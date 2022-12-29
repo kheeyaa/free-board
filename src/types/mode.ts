@@ -3,6 +3,7 @@ export type MODE =
   | "POST"
   | "NONE"
   | "ERASE"
+  | "CLEAR"
   | "SELECTION"
   | "INSERTING"
   | "RESIZING"

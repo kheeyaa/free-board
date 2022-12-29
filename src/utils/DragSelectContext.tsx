@@ -24,6 +24,7 @@ function DragSelectProvider({ children, settings = {} }: ProviderProps) {
       case "NONE":
         ds?.start();
         break;
+      case "CLEAR":
       case "TRANSLATING":
         break;
       default:

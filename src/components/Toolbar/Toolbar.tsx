@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useMode } from "../../store/mode";
 import { MODE } from "../../types/mode";
+import ClearButton from "./Button/ClearButton";
 import PencilButton from "./Button/PencilButton";
 import PostButton from "./Button/PostButton";
 import SelectionButton from "./Button/SelectionButton";
@@ -26,6 +27,12 @@ export default function Toolbar() {
         isActive={mode === "SELECTION"}
         onClick={() => {
           setMode("SELECTION");
+        }}
+      />
+      <ClearButton
+        isActive={mode === "CLEAR"}
+        onClick={() => {
+          setMode("CLEAR");
         }}
       />
     </div>
