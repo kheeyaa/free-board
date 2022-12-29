@@ -28,7 +28,11 @@ type canvasType =
     }
   | {
       mode: "TRANSLATING";
-      current?: PositionType;
+      current: PositionType;
+    }
+  | {
+      mode: "PRESSING";
+      origin: PositionType;
     }
   | {
       mode: "INSERTING";

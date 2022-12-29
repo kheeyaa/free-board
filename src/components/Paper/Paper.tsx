@@ -1,16 +1,81 @@
 import useLines from "./Lines/useLines";
 import LayerComponent from "./LayerComponent";
 import usePost from "./Post/usePost";
-import { DragSelectProvider } from "../../utils/DragSelectContext";
 import useYLayers from "../../hook/useYLayers";
 import { useCanvas } from "../../store/canvas";
-import Loading from "../common/Loading";
+import { PositionType } from "../../types/post";
 
 export default function Paper() {
-  const { canvas } = useCanvas();
+  const { canvas, setCanvas } = useCanvas();
 
-  const { isLoading, layers } = useYLayers();
+  const { layers } = useYLayers();
   const { handleAddPost } = usePost();
+
+  const startMultiSelection = (current: PositionType, origin: PositionType) => {
+    setCanvas({
+      mode: "SELECTION_NET",
+      origin,
+      current,
+    });
+  };
+
+  const translateSelectedLayers = (current: PositionType) => {
+    if (canvas.mode !== "TRANSLATING") {
+      return;
+    }
+
+    const offset = {
+      x: current.x - canvas.current.x,
+      y: current.y - canvas.current.y,
+    };
+
+    // const liveLayers = storage.get("layers");
+    // for (const id of self.presence.selection) {
+    //   const layer = liveLayers.get(id);
+    //   if (layer) {
+    //     layer.update({
+    //       x: layer.get("x") + offset.x,
+    //       y: layer.get("y") + offset.y,
+    //     });
+    //   }
+    // }
+
+    setCanvas({ mode: "TRANSLATING", current });
+  };
+
+  const onPointerDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    handleAddPost(e);
+    if (
+      canvas.mode === "PENCIL" ||
+      canvas.mode === "INSERTING" ||
+      canvas.mode === "POST"
+    )
+      return;
+
+    // setCanvas({
+    //   mode: "PRESSING",
+    //   origin: {
+    //     x: e.clientX,
+    //     y: e.clientY,
+    //   },
+    // });
+    // console.log("PRESSING", {
+    //   x: e.clientX,
+    //   y: e.clientY,
+    // });
+  };
+
+  const onPointerMove: React.PointerEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    const current = {
+      x: e.clientX,
+      y: e.clientY,
+    };
+
+    if (canvas.mode === "PRESSING") {
+      startMultiSelection(current, canvas.origin);
+    }
+  };
 
   const {
     handleLinesPointerDown,
@@ -21,35 +86,35 @@ export default function Paper() {
 
   return (
     <>
-      <DragSelectProvider>
-        <div className="relative w-full h-[2000px] overflow-hidden">
-          <div
-            onClick={handleAddPost}
-            className="bg-white shadow-md w-full h-[2000px]"
-          >
-            {layers.map((layer) => (
-              <LayerComponent
-                key={layer.id}
-                id={layer.id}
-                position={layer.position}
-                layerInfo={layer.layerInfo}
-              />
-            ))}
+      <div className="relative w-full h-[2000px] overflow-hidden touch-none">
+        <div
+          onClick={handleAddPost}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          className="bg-white shadow-md w-full h-[2000px]"
+        >
+          {layers.map((layer) => (
+            <LayerComponent
+              key={layer.id}
+              id={layer.id}
+              position={layer.position}
+              layerInfo={layer.layerInfo}
+            />
+          ))}
 
-            {canvas.mode === "PENCIL" && (
-              <svg
-                onPointerDown={handleLinesPointerDown}
-                onPointerMove={handleLinesPointerMove}
-                onPointerUp={handleLinesPointerUp}
-                style={{ touchAction: "none" }}
-                className="absolute top-0 left-0 w-full h-[2000px]"
-              >
-                <DrawingLine />
-              </svg>
-            )}
-          </div>
+          {canvas.mode === "PENCIL" && (
+            <svg
+              onPointerDown={handleLinesPointerDown}
+              onPointerMove={handleLinesPointerMove}
+              onPointerUp={handleLinesPointerUp}
+              style={{ touchAction: "none" }}
+              className="absolute top-0 left-0 w-full h-[2000px]"
+            >
+              <DrawingLine />
+            </svg>
+          )}
         </div>
-      </DragSelectProvider>
+      </div>
     </>
   );
 }
