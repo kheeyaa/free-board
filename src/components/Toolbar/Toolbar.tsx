@@ -10,7 +10,7 @@ export default function Toolbar() {
   const { mode, setMode } = useMode();
 
   return (
-    <div className="fixed top-20 left-10 w-20 bg-white shadow-md p-10 rounded-full flex flex-col gap-3 items-center">
+    <div className="fixed z-50 top-20 left-10 w-20 backdrop-blur-sm bg-white/30 shadow-md p-10 rounded-full flex flex-col gap-3 items-center">
       <PostButton
         isActive={mode === "POST"}
         onClick={() => {

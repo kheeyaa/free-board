@@ -20,7 +20,7 @@ export default function Paper() {
   return (
     <>
       <DragSelectProvider>
-        <div className="relative w-full h-[2000px] bg-gray-50 p-20 px-[150px] pb-0 overflow-hidden">
+        <div className="relative w-full h-[2000px] overflow-hidden">
           <div
             onClick={handleAddPost}
             className="bg-white shadow-md w-full h-[2000px]"
