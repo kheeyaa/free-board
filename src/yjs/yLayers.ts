@@ -17,10 +17,6 @@ provider.on("status", (event: any) => {
   console.log(event.status); // logs "connected" or "disconnected"
 });
 
-doc.on("update", (update, origin, doc, transaction) => {
-  console.log({ update, origin, doc, transaction });
-});
-
 export const yLayers: Y.Array<Y.Map<any>> = doc.getArray(`layers-${roomId}`);
 
 export const undoManager = new Y.UndoManager(yLayers);

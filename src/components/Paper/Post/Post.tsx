@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { PositionType, POST } from "../../../types/post";
 import { useMode } from "../../../store/mode";
 import useYLayers from "../../../hook/useYLayers";
@@ -15,6 +15,10 @@ const Post = forwardRef(
     const { mode, setMode } = useMode();
     const [contents, setContents] = useState(postInfo.contents);
     const { setLayer } = useYLayers();
+
+    useEffect(() => {
+      if (postInfo) setContents(postInfo.contents);
+    }, [postInfo.contents]);
 
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setContents(e.target.value);

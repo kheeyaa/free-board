@@ -2,6 +2,7 @@ import * as Y from "yjs";
 import { useEffect, useState } from "react";
 import { LayerProps } from "../components/Paper/LayerComponent";
 import { doc, yLayers } from "../yjs/yLayers";
+import { useMode } from "../store/mode";
 
 type layerUtilTypes = {
   layers: LayerProps[];
@@ -16,6 +17,7 @@ type layerUtilTypes = {
 
 export default function useYLayers(): layerUtilTypes {
   const [layers, setLayers] = useState<LayerProps[]>([]);
+  const { mode, setMode } = useMode();
 
   const handleChange = () => {
     const yLayerArr = yLayers.toArray();
@@ -30,11 +32,23 @@ export default function useYLayers(): layerUtilTypes {
     setLayers(layers);
   };
 
+  doc.on("update", (update, origin, doc, transaction) => {
+    handleChange();
+  });
+
   useEffect(() => {
+    handleChange();
     yLayers.observe(handleChange);
 
     return () => yLayers.unobserve(handleChange);
   }, []);
+
+  useEffect(() => {
+    if (mode === "CLEAR") {
+      yLayers.delete(0, yLayers.length);
+      setMode("NONE");
+    }
+  }, [mode]);
 
   const addLayer = (layer: LayerProps) => {
     const yLayer = new Y.Map();
@@ -61,14 +75,16 @@ export default function useYLayers(): layerUtilTypes {
   };
 
   const setLayer = (newLayer: LayerProps) => {
-    if (!newLayer.id) return;
+    if (!newLayer || !newLayer.id) return;
     const [yLayer, idx] = findLayer(newLayer.id);
 
     if (!yLayer || idx === -1) return;
 
-    yLayer.set("id", newLayer.id);
-    yLayer.set("position", newLayer.position);
-    yLayer.set("layerInfo", newLayer.layerInfo);
+    doc.transact(() => {
+      yLayer.set("id", newLayer.id);
+      yLayer.set("position", newLayer.position);
+      yLayer.set("layerInfo", newLayer.layerInfo);
+    });
   };
 
   const removeLayer = (id: string) => {

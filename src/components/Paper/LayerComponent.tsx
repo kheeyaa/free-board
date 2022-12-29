@@ -86,6 +86,8 @@ export default function LayerComponent({
     };
   }, []);
 
+  if (!layerInfo) return null;
+
   switch (layerInfo.type) {
     case "LINE":
       return (
