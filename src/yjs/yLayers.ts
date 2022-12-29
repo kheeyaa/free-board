@@ -1,13 +1,24 @@
 import * as Y from "yjs";
-import { updateYDoc } from "../firebase/yLayers";
+import { WebsocketProvider } from "y-websocket";
 
 const roomId = 1;
 
 export const doc = new Y.Doc();
 
+export const provider = new WebsocketProvider(
+  "ws://localhost:1234",
+  `canvas-${roomId}`,
+  doc
+);
+
+export const awareness = provider.awareness;
+
+provider.on("status", (event: any) => {
+  console.log(event.status); // logs "connected" or "disconnected"
+});
+
 doc.on("update", (update, origin, doc, transaction) => {
   console.log({ update, origin, doc, transaction });
-  updateYDoc(update);
 });
 
 export const yLayers: Y.Array<Y.Map<any>> = doc.getArray(`layers-${roomId}`);
