@@ -14,10 +14,6 @@ export const provider = new WebsocketProvider(
 
 export const awareness = provider.awareness;
 
-provider.on("status", (event: any) => {
-  console.log(event.status); // logs "connected" or "disconnected"
-});
-
 export const yLayers: Y.Array<Y.Map<any>> = doc.getArray(`layers-${roomId}`);
 
 export const undoManager = new Y.UndoManager(yLayers);

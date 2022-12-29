@@ -4,11 +4,12 @@ import usePost from "./Post/usePost";
 import { DragSelectProvider } from "../../utils/DragSelectContext";
 import useYLayers from "../../hook/useYLayers";
 import { useCanvas } from "../../store/canvas";
+import Loading from "../common/Loading";
 
 export default function Paper() {
   const { canvas } = useCanvas();
 
-  const { layers } = useYLayers();
+  const { isLoading, layers } = useYLayers();
   const { handleAddPost } = usePost();
 
   const {

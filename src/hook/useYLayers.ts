@@ -1,10 +1,11 @@
 import * as Y from "yjs";
 import { useEffect, useState } from "react";
 import { LayerProps } from "../components/Paper/LayerComponent";
-import { doc, yLayers } from "../yjs/yLayers";
+import { doc, provider, yLayers } from "../yjs/yLayers";
 import { useCanvas } from "../store/canvas";
 
 type layerUtilTypes = {
+  isLoading: boolean;
   layers: LayerProps[];
   setLayer: (layer: LayerProps) => void;
   addLayer: (layer: LayerProps) => void;
@@ -15,9 +16,14 @@ type layerUtilTypes = {
 };
 
 export default function useYLayers(): layerUtilTypes {
+  const [isLoading, setIsLoading] = useState(true);
   const [layers, setLayers] = useState<LayerProps[]>([]);
 
   const { canvas, setCanvas } = useCanvas();
+
+  provider.on("sync", (isSynced: boolean) => {
+    setIsLoading(!isSynced);
+  });
 
   const handleChange = () => {
     const yLayerArr = yLayers.toArray();
@@ -126,6 +132,7 @@ export default function useYLayers(): layerUtilTypes {
   };
 
   return {
+    isLoading,
     layers,
     addLayer,
     setLayer,
