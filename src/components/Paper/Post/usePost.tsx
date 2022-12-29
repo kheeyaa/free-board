@@ -31,10 +31,6 @@ export default function usePost() {
       },
       layerInfo: {
         id,
-        position: {
-          x: e.pageX,
-          y: e.pageY,
-        },
         type: "POST",
         postInfo: newPost,
       },

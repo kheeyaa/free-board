@@ -28,7 +28,6 @@ const Post = forwardRef(
         layerInfo: {
           type: "POST",
           id,
-          position,
           postInfo: {
             ...postInfo,
             contents: e.target.value,

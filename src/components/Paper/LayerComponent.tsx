@@ -6,9 +6,13 @@ import { useDragSelect } from "../../utils/DragSelectContext";
 import Line, { LineProps } from "./Lines/Line";
 import Post, { PostProps } from "./Post/Post";
 
+export type LayerInfoType =
+  | Omit<LineProps, "position">
+  | Omit<PostProps, "position">;
+
 export type LayerProps = {
   id: string;
-  layerInfo: LineProps | PostProps;
+  layerInfo: LayerInfoType;
   position: PositionType;
 };
 
