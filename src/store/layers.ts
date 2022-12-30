@@ -1,4 +1,4 @@
-import { LayerProps } from "@/components/Paper/LayerComponent";
+import { LayerProps } from "@/components/Canvas/LayerComponent";
 import create from "zustand";
 
 type createLayers = {

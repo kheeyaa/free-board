@@ -5,7 +5,7 @@ import { useCanvas } from "@/store/canvas";
 import useYLayers from "@/hook/useYLayers";
 import { PositionType } from "@/types/post";
 
-export default function Paper() {
+export default function Canvas() {
   const { canvas, setCanvas } = useCanvas();
 
   const { layers } = useYLayers();

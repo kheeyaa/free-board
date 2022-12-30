@@ -1,6 +1,6 @@
 import * as Y from "yjs";
 import { useEffect, useState } from "react";
-import { LayerProps } from "@/components/Paper/LayerComponent";
+import { LayerProps } from "@/components/Canvas/LayerComponent";
 import { DeepPartial } from "@/types/DeepPartial";
 import { useCanvas } from "@/store/canvas";
 import { doc, provider, yLayers } from "@/yjs/yLayers";
