@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import { LayerProps } from "../components/Paper/LayerComponent";
 import { doc, provider, yLayers } from "../yjs/yLayers";
 import { useCanvas } from "../store/canvas";
+import deepUpdate from "../utils/deepUpdate";
+import { DeepPartial } from "../types/DeepPartial";
 
 type layerUtilTypes = {
   isLoading: boolean;
   layers: LayerProps[];
-  setLayer: (layer: LayerProps) => void;
+  setLayer: (
+    layer: DeepPartial<LayerProps> & { type: string; id: string }
+  ) => void;
   addLayer: (layer: LayerProps) => void;
   removeLayer: (id: string) => void;
   bringLayerFront: (id: string) => void;
@@ -27,12 +31,23 @@ export default function useYLayers(): layerUtilTypes {
 
   const handleChange = () => {
     const yLayerArr = yLayers.toArray();
-    const layers = yLayerArr.map((yLayer) => {
-      return {
+    const layers = yLayerArr.map((yLayer): LayerProps => {
+      const layer = {
         id: yLayer.get("id"),
-        layerInfo: yLayer.get("layerInfo"),
+        type: yLayer.get("type"),
         position: yLayer.get("position"),
       };
+
+      if (layer.type === "POST")
+        return {
+          ...layer,
+          postInfo: yLayer.get("postInfo"),
+        };
+      else
+        return {
+          ...layer,
+          lineInfo: yLayer.get("lineInfo"),
+        };
     });
 
     setLayers(layers);
@@ -61,8 +76,10 @@ export default function useYLayers(): layerUtilTypes {
 
     doc.transact(() => {
       yLayer.set("id", layer.id);
+      yLayer.set("type", layer.type);
       yLayer.set("position", layer.position);
-      yLayer.set("layerInfo", layer.layerInfo);
+      if (layer.type === "POST") yLayer.set("postInfo", layer.postInfo);
+      if (layer.type === "LINE") yLayer.set("lineInfo", layer.lineInfo);
     });
 
     yLayers.push([yLayer]);
@@ -83,16 +100,28 @@ export default function useYLayers(): layerUtilTypes {
     return [yLayers.get(idx), idx];
   };
 
-  const setLayer = (newLayer: LayerProps) => {
-    if (!newLayer || !newLayer.id) return;
-    const [yLayer, idx] = findLayer(newLayer.id);
+  const setLayer = (
+    updated: DeepPartial<LayerProps> & { type: string; id: string }
+  ) => {
+    if (!updated || !updated.id) return;
+    const [yLayer, idx] = findLayer(updated.id);
 
     if (!yLayer || idx === -1) return;
 
     doc.transact(() => {
-      yLayer.set("id", newLayer.id);
-      yLayer.set("position", newLayer.position);
-      yLayer.set("layerInfo", newLayer.layerInfo);
+      yLayer.set("id", updated.id);
+      updated?.position && yLayer.set("position", updated.position);
+
+      if (updated.type === "POST" && updated?.postInfo) {
+        const postInfo = yLayer.get("postInfo");
+        deepUpdate(updated?.postInfo, postInfo);
+        yLayer.set("postInfo", postInfo);
+      }
+      if (updated.type === "LINE" && updated?.lineInfo) {
+        const lineInfo = yLayer.get("lineInfo");
+        deepUpdate(updated?.lineInfo, lineInfo);
+        yLayer.set("lineInfo", lineInfo);
+      }
     });
   };
 

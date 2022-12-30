@@ -17,8 +17,8 @@ export type LineTypes = {
 export type LineProps = {
   id: string;
   type: "LINE";
-  lineInfo: LineTypes;
   position: PositionType;
+  lineInfo: LineTypes;
 };
 
 const options = {

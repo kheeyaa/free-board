@@ -93,14 +93,25 @@ export default function Paper() {
           onPointerMove={onPointerMove}
           className="bg-white shadow-md w-full h-[2000px]"
         >
-          {layers.map((layer) => (
-            <LayerComponent
-              key={layer.id}
-              id={layer.id}
-              position={layer.position}
-              layerInfo={layer.layerInfo}
-            />
-          ))}
+          {layers.map((layer) =>
+            layer.type === "POST" ? (
+              <LayerComponent
+                key={layer.id}
+                id={layer.id}
+                type={layer.type}
+                position={layer.position}
+                postInfo={layer.postInfo}
+              />
+            ) : (
+              <LayerComponent
+                key={layer.id}
+                id={layer.id}
+                type={layer.type}
+                position={layer.position}
+                lineInfo={layer.lineInfo}
+              />
+            )
+          )}
 
           {canvas.mode === "PENCIL" && (
             <svg

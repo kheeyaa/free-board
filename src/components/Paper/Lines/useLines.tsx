@@ -78,11 +78,7 @@ export default function useLines() {
     setIsDrawing(false);
 
     const newLine = getLineInfo(line);
-    addLayer({
-      id: newLine.id,
-      layerInfo: newLine,
-      position: newLine.position,
-    });
+    addLayer(newLine);
     setLine([]);
   }
 

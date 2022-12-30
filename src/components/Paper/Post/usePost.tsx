@@ -25,15 +25,12 @@ export default function usePost() {
 
     addLayer({
       id,
+      type: "POST",
       position: {
         x: e.pageX,
         y: e.pageY,
       },
-      layerInfo: {
-        id,
-        type: "POST",
-        postInfo: newPost,
-      },
+      postInfo: newPost,
     });
     setCanvas({ mode: "NONE" });
   };

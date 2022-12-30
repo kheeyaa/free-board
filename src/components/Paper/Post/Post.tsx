@@ -24,14 +24,9 @@ const Post = forwardRef(
       setContents(e.target.value);
       setLayer({
         id,
-        position,
-        layerInfo: {
-          type: "POST",
-          id,
-          postInfo: {
-            ...postInfo,
-            contents: e.target.value,
-          },
+        type: "POST",
+        postInfo: {
+          contents: e.target.value,
         },
       });
     };
@@ -42,7 +37,7 @@ const Post = forwardRef(
         className="absolute bg-yellow-200 shadow-md top-0 left-0"
         style={{
           transition: postInfo.isAnimated ? "transform 50ms linear" : "",
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          transform: `translate(${position?.x || 0}px, ${position?.y || 0}px)`,
         }}
         data-id={id}
       >

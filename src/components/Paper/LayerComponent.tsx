@@ -1,41 +1,27 @@
-import { useEffect, useRef } from "react";
 import useYLayers from "../../hook/useYLayers";
 import { useCanvas } from "../../store/canvas";
-import { PositionType } from "../../types/post";
-import { useDragSelect } from "../../utils/DragSelectContext";
 import Line, { LineProps } from "./Lines/Line";
 import Post, { PostProps } from "./Post/Post";
 
-export type LayerInfoType =
-  | Omit<LineProps, "position">
-  | Omit<PostProps, "position">;
+export type LayerProps = LineProps | PostProps;
 
-export type LayerProps = {
-  id: string;
-  layerInfo: LayerInfoType;
-  position: PositionType;
-};
-
-export default function LayerComponent({
-  id,
-  layerInfo,
-  position,
-}: LayerProps) {
+export default function LayerComponent(props: LayerProps) {
+  const { id, position, type } = props;
   const { canvas, setCanvas } = useCanvas();
 
   const { bringLayerFront } = useYLayers();
 
-  if (!layerInfo) return null;
+  if (!type) return null;
 
-  switch (layerInfo.type) {
+  switch (type) {
     case "LINE":
       return (
         <Line
-          type={layerInfo.type}
+          type={type}
           id={id}
           position={position}
           lineInfo={{
-            ...layerInfo.lineInfo,
+            ...props.lineInfo,
             isAnimated: canvas.mode !== "TRANSLATING",
           }}
         />
@@ -43,11 +29,11 @@ export default function LayerComponent({
     case "POST":
       return (
         <Post
-          type={layerInfo.type}
+          type={type}
           id={id}
           position={position}
           postInfo={{
-            ...layerInfo.postInfo,
+            ...props.postInfo,
             isAnimated: canvas.mode !== "TRANSLATING",
           }}
         />
