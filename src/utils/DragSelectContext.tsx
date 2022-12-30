@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import DragSelect from "dragselect";
-import { useCanvas } from "../store/canvas";
+import { useCanvas } from "@/store/canvas";
 
 type ProviderProps = {
   children: React.ReactNode;

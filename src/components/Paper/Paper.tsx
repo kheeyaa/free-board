@@ -1,9 +1,9 @@
 import useLines from "./Lines/useLines";
 import LayerComponent from "./LayerComponent";
 import usePost from "./Post/usePost";
-import useYLayers from "../../hook/useYLayers";
-import { useCanvas } from "../../store/canvas";
-import { PositionType } from "../../types/post";
+import { useCanvas } from "@/store/canvas";
+import useYLayers from "@/hook/useYLayers";
+import { PositionType } from "@/types/post";
 
 export default function Paper() {
   const { canvas, setCanvas } = useCanvas();

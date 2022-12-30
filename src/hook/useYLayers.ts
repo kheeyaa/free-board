@@ -1,10 +1,10 @@
 import * as Y from "yjs";
 import { useEffect, useState } from "react";
-import { LayerProps } from "../components/Paper/LayerComponent";
-import { doc, provider, yLayers } from "../yjs/yLayers";
-import { useCanvas } from "../store/canvas";
-import deepUpdate from "../utils/deepUpdate";
-import { DeepPartial } from "../types/DeepPartial";
+import { LayerProps } from "@/components/Paper/LayerComponent";
+import { DeepPartial } from "@/types/DeepPartial";
+import { useCanvas } from "@/store/canvas";
+import { doc, provider, yLayers } from "@/yjs/yLayers";
+import deepUpdate from "@/utils/deepUpdate";
 
 type layerUtilTypes = {
   isLoading: boolean;

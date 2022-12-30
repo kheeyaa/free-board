@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { getStroke } from "perfect-freehand";
-import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 import { v4 as uuidv4 } from "uuid";
 import { LineProps, Point } from "./Line";
-import useYLayers from "../../../hook/useYLayers";
-import { useCanvas } from "../../../store/canvas";
+import useYLayers from "@/hook/useYLayers";
+import { useCanvas } from "@/store/canvas";
+import { getSvgPathFromStroke } from "@/utils/getSvgPathFromStroke";
 
 export default function useLines() {
   const { addLayer } = useYLayers();

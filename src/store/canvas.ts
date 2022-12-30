@@ -1,5 +1,5 @@
+import { PositionType } from "@/types/post";
 import create from "zustand";
-import { PositionType } from "../types/post";
 
 type canvasType =
   | {

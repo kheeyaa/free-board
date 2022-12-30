@@ -1,5 +1,5 @@
-import useYLayers from "../../hook/useYLayers";
-import { useCanvas } from "../../store/canvas";
+import useYLayers from "@/hook/useYLayers";
+import { useCanvas } from "@/store/canvas";
 import Line, { LineProps } from "./Lines/Line";
 import Post, { PostProps } from "./Post/Post";
 

@@ -1,4 +1,4 @@
-import { useCanvas } from "../../store/canvas";
+import { useCanvas } from "@/store/canvas";
 import ClearButton from "./Button/ClearButton";
 import PencilButton from "./Button/PencilButton";
 import PostButton from "./Button/PostButton";

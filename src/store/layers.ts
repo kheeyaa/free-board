@@ -1,5 +1,5 @@
+import { LayerProps } from "@/components/Paper/LayerComponent";
 import create from "zustand";
-import { LayerProps } from "../components/Paper/LayerComponent";
 
 type createLayers = {
   layers: LayerProps[];

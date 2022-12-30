@@ -1,7 +1,7 @@
+import { PositionType } from "@/types/post";
+import { getSvgPathFromStroke } from "@/utils/getSvgPathFromStroke";
 import { getStroke } from "perfect-freehand";
 import { forwardRef } from "react";
-import { PositionType } from "../../../types/post";
-import { getSvgPathFromStroke } from "../../../utils/getSvgPathFromStroke";
 
 export type Point = [number, number, number];
 
