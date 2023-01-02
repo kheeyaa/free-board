@@ -23,7 +23,7 @@ export type LineProps = {
 
 const options = {
   size: 10,
-  thinning: 0.6,
+  thinning: 0,
   streamline: 0.6,
   smoothing: 0.8,
 };
